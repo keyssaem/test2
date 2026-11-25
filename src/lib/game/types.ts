@@ -1,5 +1,6 @@
 export type ClassInfo = {
   id: string;
+  teacherId: string;
   name: string;
   joinCode: string;
   isPaused: boolean;

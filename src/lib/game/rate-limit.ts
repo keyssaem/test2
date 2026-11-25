@@ -22,3 +22,5 @@ export function createRateLimiter(limit: number, windowMs: number) {
 export const attemptLimiter = createRateLimiter(8, 60_000);
 // 같은 IP에서 1분에 30번까지 입장 시도
 export const joinLimiter = createRateLimiter(30, 60_000);
+// 교사 코드 무차별 대입 방지: IP당 1분에 5번
+export const teacherLoginLimiter = createRateLimiter(5, 60_000);

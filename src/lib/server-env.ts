@@ -12,6 +12,8 @@ export const serverSchema = z
     ANTHROPIC_API_KEY: optional, // 없으면 오프라인 키워드 채점으로 동작
     CLAUDE_MODEL: z.preprocess((v) => (v === "" ? undefined : v), z.string().default("claude-opus-5-5")),
     STUDENT_SESSION_SECRET: z.string().min(32, "STUDENT_SESSION_SECRET 은 32자 이상이어야 합니다."),
+    // memory 모드에서 교사 로그인에 쓰는 코드. 비워 두면 교사 화면을 쓸 수 없다.
+    TEACHER_PASSCODE: z.preprocess((v) => (v === "" ? undefined : v), z.string().min(8, "TEACHER_PASSCODE 는 8자 이상이어야 합니다.").optional()),
   })
   .refine((e) => e.DATA_BACKEND !== "supabase" || !!e.SUPABASE_SERVICE_ROLE_KEY, {
     message: "DATA_BACKEND=supabase 이면 SUPABASE_SERVICE_ROLE_KEY 가 필요합니다.",

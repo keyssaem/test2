@@ -15,6 +15,10 @@ describe("채점", () => {
     expect(computeScore(apple.rubric, r.matched)).toBe(100);
   });
 
+  it("'빨갛고' 같은 형용사 형태도 색깔로 인정", () => {
+    expect(computeScore(apple.rubric, keywordScore(apple, "빨갛고 둥근 사과").matched)).toBe(100);
+  });
+
   it("사물만 말하면 50점, 통과 기준(60) 미달", () => {
     const r = keywordScore(apple, "사과");
     const score = computeScore(apple.rubric, r.matched);

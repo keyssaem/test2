@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { createStudentToken, verifyStudentToken } from "@/lib/student-session";
+import { createStudentToken, createTeacherToken, verifyStudentToken, verifyTeacherToken } from "@/lib/student-session";
 
 const secret = "t".repeat(48);
 const now = 1_800_000_000;
@@ -34,5 +34,16 @@ describe("학생 세션 토큰", () => {
 
   it("짧은 비밀값으로는 토큰을 만들 수 없다", () => {
     expect(() => createStudentToken(who, "short", now)).toThrow();
+  });
+});
+
+describe("교사 세션 토큰", () => {
+  it("정상 교사 토큰은 검증된다", () => {
+    expect(verifyTeacherToken(createTeacherToken("t-1", secret, now), secret, now)).toMatchObject({ teacherId: "t-1" });
+  });
+
+  it("학생 토큰을 교사 토큰으로 쓸 수 없고, 그 반대도 안 된다", () => {
+    expect(verifyTeacherToken(createStudentToken(who, secret, now), secret, now)).toBeNull();
+    expect(verifyStudentToken(createTeacherToken("t-1", secret, now), secret, now)).toBeNull();
   });
 });

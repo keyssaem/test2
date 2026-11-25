@@ -15,6 +15,10 @@ export default function Home() {
         <li>★ 레벨 5개 · 그림마다 기회 3번</li>
         <li>★ 실명 대신 별명을 써요 (개인정보 보호)</li>
       </ul>
+
+      <a href="/teacher" className="text-xs underline text-violet-soft">
+        선생님이신가요? 대시보드 열기 →
+      </a>
     </main>
   );
 }

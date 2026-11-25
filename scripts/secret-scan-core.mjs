@@ -8,7 +8,7 @@ export const RULES = [
   // .env 형식으로 비밀값이 채워진 줄 (빈 값은 허용)
   {
     id: "env-secret-assignment",
-    re: /^(?:SUPABASE_SERVICE_ROLE_KEY|ANTHROPIC_API_KEY|STUDENT_SESSION_SECRET)[ \t]*=[ \t]*[^\s#]+/gm,
+    re: /^(?:SUPABASE_SERVICE_ROLE_KEY|ANTHROPIC_API_KEY|STUDENT_SESSION_SECRET|TEACHER_PASSCODE)[ \t]*=[ \t]*[^\s#]+/gm,
   },
 ];
 

@@ -44,12 +44,17 @@ export default function PlayScreen() {
     void load();
   }, [load]);
 
-  // 선생님이 일시정지했을 때 풀렸는지 주기적으로 확인
+  // 선생님의 일시정지/재개를 주기적으로 확인 (멈춤 중에는 더 자주)
+  const paused = !!view?.isPaused;
   useEffect(() => {
-    if (!view?.isPaused) return;
-    const t = setInterval(load, 5000);
+    const t = setInterval(async () => {
+      const res = await fetch("/api/student/state", { cache: "no-store" }).catch(() => null);
+      if (!res?.ok) return;
+      const data = (await res.json()) as StudentView;
+      setView((prev) => (prev ? { ...prev, isPaused: data.isPaused } : data));
+    }, paused ? 3000 : 8000);
     return () => clearInterval(t);
-  }, [view?.isPaused, load]);
+  }, [paused]);
 
   async function submit(e: React.FormEvent) {
     e.preventDefault();

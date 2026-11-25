@@ -53,7 +53,7 @@ export const LEVELS: Level[] = [
         referencePrompt: "빨간 사과 한 개",
         rubric: [
           { id: "object", label: "사물", keywords: ["사과"], hint: "그림 한가운데 있는 과일의 이름은 뭘까요?" },
-          color("color", ["빨간", "빨강", "붉은", "붉"]),
+          color("color", ["빨간", "빨강", "빨갛", "붉은", "붉"]),
         ],
       },
       {
@@ -63,7 +63,7 @@ export const LEVELS: Level[] = [
         referencePrompt: "파란 풍선 하나",
         rubric: [
           { id: "object", label: "사물", keywords: ["풍선"], hint: "하늘로 둥실 떠오르는 이것은 뭘까요?" },
-          color("color", ["파란", "파랑", "푸른"]),
+          color("color", ["파란", "파랑", "파랗", "푸른"]),
         ],
       },
     ],
@@ -83,7 +83,7 @@ export const LEVELS: Level[] = [
         referencePrompt: "바닷가 모래사장 위에 있는 노란 공",
         rubric: [
           { id: "object", label: "사물", keywords: ["공"], hint: "모래 위에 놓인 둥근 물건은 뭘까요?" },
-          color("color", ["노란", "노랑"]),
+          color("color", ["노란", "노랑", "노랗"]),
           { id: "place", label: "장소", keywords: ["모래", "해변", "바닷가", "바다", "해수욕"], hint: "여기는 어디일까요? 장소를 말해 보세요." },
         ],
       },
@@ -94,7 +94,7 @@ export const LEVELS: Level[] = [
         referencePrompt: "깜깜한 밤하늘에 뜬 노란 보름달",
         rubric: [
           { id: "object", label: "사물", keywords: ["달"], hint: "하늘에 떠 있는 동그란 것은 뭘까요?" },
-          color("color", ["노란", "노랑", "금색", "황금"]),
+          color("color", ["노란", "노랑", "노랗", "금색", "황금"]),
           { id: "place", label: "장소·때", keywords: ["밤", "하늘", "어두", "깜깜"], hint: "언제, 어디에 떠 있나요?" },
         ],
       },
