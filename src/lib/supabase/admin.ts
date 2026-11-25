@@ -8,7 +8,9 @@ import { serverEnv } from "@/lib/server-env";
  * 학생은 Supabase 계정이 없으므로(개인정보 최소화) 학생 쓰기 요청은 모두 이 경로를 거친다.
  */
 export function createSupabaseAdminClient() {
-  return createClient(publicEnv().NEXT_PUBLIC_SUPABASE_URL, serverEnv().SUPABASE_SERVICE_ROLE_KEY, {
+  const key = serverEnv().SUPABASE_SERVICE_ROLE_KEY;
+  if (!key) throw new Error("SUPABASE_SERVICE_ROLE_KEY 가 설정되지 않았습니다.");
+  return createClient(publicEnv().NEXT_PUBLIC_SUPABASE_URL, key, {
     auth: { persistSession: false, autoRefreshToken: false },
   });
 }

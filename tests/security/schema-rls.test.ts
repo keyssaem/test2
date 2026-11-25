@@ -7,15 +7,15 @@ const tables = [...sql.matchAll(/create table public\.(\w+)/g)].map((m) => m[1])
 
 describe("스키마 보안 규칙", () => {
   it("테이블이 정의되어 있다", () => {
-    expect(tables.length).toBeGreaterThanOrEqual(6);
+    expect(tables.length).toBeGreaterThanOrEqual(5);
   });
 
   it.each(tables)("%s 테이블에 RLS가 켜져 있다", (t) => {
     expect(sql).toMatch(new RegExp(`alter table public\\.${t}\\s+enable row level security`));
   });
 
-  it("정답 프롬프트 테이블(target_images)에는 클라이언트 정책이 없다", () => {
-    expect(sql).not.toMatch(/create policy \w+ on public\.target_images/);
+  it("정답 프롬프트는 DB에 저장하지 않는다", () => {
+    expect(sql).not.toMatch(/reference_prompt/);
   });
 
   it("anon 역할 권한을 회수한다", () => {

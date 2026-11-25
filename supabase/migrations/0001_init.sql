@@ -31,7 +31,9 @@ create table public.students (
   unique (class_id, number)
 );
 
--- ── 레벨 / 목표 그림 (정답 프롬프트는 서버만 읽음) ──────────────
+-- ── 레벨 ────────────────────────────────────────────────────────
+-- 목표 그림과 정답 프롬프트·채점 요소는 DB가 아니라 서버 코드(src/content/levels.ts)에 있다.
+-- (클라이언트가 DB로 정답을 읽어 갈 경로 자체가 없음)
 create table public.levels (
   id              int primary key,
   title           text not null,
@@ -40,21 +42,12 @@ create table public.levels (
   max_attempts    int  not null default 3 check (max_attempts between 1 and 10)
 );
 
-create table public.target_images (
-  id                uuid primary key default gen_random_uuid(),
-  level_id          int  not null references public.levels(id) on delete cascade,
-  storage_path      text not null,
-  reference_prompt  text not null,
-  keywords          text[] not null default '{}',
-  sort              int  not null default 0
-);
-
 -- ── 시도 기록 ───────────────────────────────────────────────────
 create table public.attempts (
   id          uuid primary key default gen_random_uuid(),
   student_id  uuid not null references public.students(id) on delete cascade,
   class_id    uuid not null references public.classes(id) on delete cascade,
-  image_id    uuid not null references public.target_images(id) on delete cascade,
+  image_id    text not null check (char_length(image_id) <= 40),
   prompt      text not null check (char_length(prompt) between 1 and 100),
   score       int  check (score between 0 and 100),
   feedback    text,
@@ -70,12 +63,13 @@ create table public.student_progress (
   student_id     uuid primary key references public.students(id) on delete cascade,
   class_id       uuid not null references public.classes(id) on delete cascade,
   current_level  int  not null default 1 references public.levels(id),
-  current_image  uuid references public.target_images(id) on delete set null,
+  image_index    int  not null default 0,
   attempts_left  int  not null default 3,
+  level_passed   int  not null default 0,
   passed_count   int  not null default 0,
   best_score     int  not null default 0,
-  last_prompt    text,
-  status         text not null default 'playing' check (status in ('playing','passed','stuck','done')),
+  last_prompt    text check (char_length(last_prompt) <= 100),
+  status         text not null default 'playing' check (status in ('playing','stuck','done')),
   updated_at     timestamptz not null default now()
 );
 create index progress_class_idx on public.student_progress (class_id);
@@ -86,7 +80,6 @@ create index progress_class_idx on public.student_progress (class_id);
 alter table public.classes          enable row level security;
 alter table public.students         enable row level security;
 alter table public.levels           enable row level security;
-alter table public.target_images    enable row level security;
 alter table public.attempts         enable row level security;
 alter table public.student_progress enable row level security;
 
@@ -118,8 +111,6 @@ create policy progress_delete_teacher on public.student_progress for delete to a
 
 -- levels: 로그인 교사는 읽기만
 create policy levels_select_auth on public.levels for select to authenticated using (true);
-
--- target_images: 정책 없음 → anon/authenticated 모두 접근 불가 (정답 프롬프트 보호, 서버 전용)
 
 -- anon(비로그인) 역할에는 어떤 테이블 권한도 주지 않는다
 revoke all on all tables in schema public from anon;

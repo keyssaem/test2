@@ -1,26 +1,140 @@
 @import "tailwindcss";
 
+/* 보라 × 주황 픽셀 게임 테마 */
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --night: #2b1b4d;
+  --night-2: #3d2670;
+  --violet: #7b4fd6;
+  --violet-soft: #b9a3f0;
+  --orange: #ff9a3c;
+  --orange-deep: #e0701a;
+  --cream: #fff7e8;
+  --ink: #23163d;
+  --mint: #3ccf91;
+  --rose: #ff5d7a;
 }
 
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-night: var(--night);
+  --color-night-2: var(--night-2);
+  --color-violet: var(--violet);
+  --color-violet-soft: var(--violet-soft);
+  --color-orange: var(--orange);
+  --color-orange-deep: var(--orange-deep);
+  --color-cream: var(--cream);
+  --color-ink: var(--ink);
+  --color-mint: var(--mint);
+  --color-rose: var(--rose);
+  --font-pixel: var(--font-pixel);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html,
+body {
+  min-height: 100%;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  color: var(--cream);
+  font-family: var(--font-pixel), system-ui, sans-serif;
+  background-color: var(--night);
+  /* 픽셀 별 배경 */
+  background-image:
+    radial-gradient(2px 2px at 20px 30px, #ffffffcc 50%, transparent 51%),
+    radial-gradient(2px 2px at 140px 80px, #ffd84acc 50%, transparent 51%),
+    radial-gradient(2px 2px at 90px 160px, #ffffff99 50%, transparent 51%),
+    radial-gradient(2px 2px at 200px 200px, #b9a3f0cc 50%, transparent 51%),
+    linear-gradient(180deg, var(--night) 0%, var(--night-2) 100%);
+  background-size: 240px 240px, 240px 240px, 240px 240px, 240px 240px, 100% 100%;
+  background-attachment: fixed;
+  image-rendering: pixelated;
+}
+
+/* 계단형 픽셀 테두리 */
+.pixel-box {
+  background: var(--cream);
+  color: var(--ink);
+  box-shadow:
+    0 -4px 0 0 var(--ink),
+    0 4px 0 0 var(--ink),
+    -4px 0 0 0 var(--ink),
+    4px 0 0 0 var(--ink),
+    4px 8px 0 0 #0004;
+  margin: 4px;
+}
+
+.pixel-btn {
+  background: var(--orange);
+  color: var(--ink);
+  font-weight: 700;
+  padding: 0.7rem 1.4rem;
+  box-shadow:
+    0 -4px 0 0 var(--ink),
+    0 4px 0 0 var(--ink),
+    -4px 0 0 0 var(--ink),
+    4px 0 0 0 var(--ink),
+    inset -4px -4px 0 0 var(--orange-deep);
+  transition: transform 80ms;
+  cursor: pointer;
+}
+.pixel-btn:hover {
+  filter: brightness(1.06);
+}
+.pixel-btn:active {
+  transform: translateY(3px);
+}
+.pixel-btn:disabled {
+  background: #b8aec9;
+  box-shadow:
+    0 -4px 0 0 var(--ink),
+    0 4px 0 0 var(--ink),
+    -4px 0 0 0 var(--ink),
+    4px 0 0 0 var(--ink);
+  cursor: not-allowed;
+}
+.pixel-btn.secondary {
+  background: var(--violet-soft);
+  box-shadow:
+    0 -4px 0 0 var(--ink),
+    0 4px 0 0 var(--ink),
+    -4px 0 0 0 var(--ink),
+    4px 0 0 0 var(--ink),
+    inset -4px -4px 0 0 #8f76d9;
+}
+
+.pixel-input {
+  background: #ffffff;
+  color: var(--ink);
+  padding: 0.6rem 0.8rem;
+  border: 4px solid var(--ink);
+  outline: none;
+}
+.pixel-input:focus {
+  border-color: var(--violet);
+  box-shadow: 0 0 0 4px var(--orange);
+}
+
+.title-shadow {
+  text-shadow:
+    4px 4px 0 var(--ink),
+    -2px -2px 0 var(--violet);
+}
+
+@keyframes pop {
+  0% { transform: scale(0.6); opacity: 0; }
+  70% { transform: scale(1.08); opacity: 1; }
+  100% { transform: scale(1); }
+}
+.pop {
+  animation: pop 320ms steps(6) both;
+}
+
+@keyframes blink {
+  50% { opacity: 0.3; }
+}
+.blink {
+  animation: blink 1s steps(2) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .pop, .blink { animation: none; }
 }

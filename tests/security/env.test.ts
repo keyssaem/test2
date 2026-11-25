@@ -13,8 +13,22 @@ describe("환경변수 검증", () => {
     expect(parseServerEnv(ok).ANTHROPIC_API_KEY).toHaveLength(40);
   });
 
-  it("비밀값이 빠지면 실패", () => {
-    expect(() => parseServerEnv({ ...ok, ANTHROPIC_API_KEY: undefined })).toThrow();
+  it("AI 키가 없으면(빈 값 포함) 키워드 채점 모드로 통과", () => {
+    expect(parseServerEnv({ ...ok, ANTHROPIC_API_KEY: "" }).ANTHROPIC_API_KEY).toBeUndefined();
+  });
+
+  it("기본 저장소는 memory, 기본 모델은 claude-opus-5-5", () => {
+    const env = parseServerEnv(ok);
+    expect(env.DATA_BACKEND).toBe("memory");
+    expect(env.CLAUDE_MODEL).toBe("claude-opus-5-5");
+  });
+
+  it("supabase 저장소인데 service_role 키가 없으면 실패", () => {
+    expect(() => parseServerEnv({ ...ok, DATA_BACKEND: "supabase", SUPABASE_SERVICE_ROLE_KEY: "" })).toThrow(/SERVICE_ROLE/);
+  });
+
+  it("세션 비밀값이 없으면 실패", () => {
+    expect(() => parseServerEnv({ ...ok, STUDENT_SESSION_SECRET: undefined })).toThrow();
   });
 
   it("세션 비밀값이 32자 미만이면 실패", () => {
