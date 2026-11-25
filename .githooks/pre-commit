@@ -1,0 +1,6 @@
+#!/bin/sh
+# 커밋 직전 비밀값 유출 검사. 실패하면 커밋이 중단된다.
+node scripts/check-secrets.mjs --staged || {
+  echo "커밋이 차단되었습니다. 위 파일에서 비밀값을 제거하세요."
+  exit 1
+}
